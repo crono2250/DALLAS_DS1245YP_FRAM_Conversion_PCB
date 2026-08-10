@@ -1,0 +1,146 @@
+*************************************************************
+FileName = 3ENVR-260701.GBR
+AutoAperture = True
+*************************************************************
+Generating : M1_Outline_PCB
+      File : 3ENVR-260701.GM1
+
+    Adding Layer      : M1_Outline_PCB
+
+    Adding Layer      : M3_Vcut
+
+    Adding Layer      : M4_NCcut
+
+
+Used DCodes :
+    D10
+    D35
+*************************************************************
+
+*************************************************************
+Generating : Bottom Overlay
+      File : 3ENVR-260701.GBO
+
+    Adding Layer      : Bottom Overlay
+
+
+Used DCodes :
+*************************************************************
+
+*************************************************************
+Generating : Bottom Solder
+      File : 3ENVR-260701.GBS
+
+    Adding Layer      : Bottom Solder
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D29
+*************************************************************
+
+*************************************************************
+Generating : Top Solder
+      File : 3ENVR-260701.GTS
+
+    Adding Layer      : Top Solder
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D20
+    D21
+    D22
+    D23
+    D24
+    D25
+    D26
+    D27
+    D28
+    D29
+*************************************************************
+
+*************************************************************
+Generating : Top Paste
+      File : 3ENVR-260701.GTP
+
+    Adding Layer      : Top Paste
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D13
+    D14
+    D15
+    D16
+    D17
+    D18
+    D19
+*************************************************************
+
+*************************************************************
+Generating : Top Overlay
+      File : 3ENVR-260701.GTO
+
+    Adding Layer      : Top Overlay
+
+
+Used DCodes :
+    D10
+    D11
+    D12
+*************************************************************
+
+*************************************************************
+Generating : Bottom Layer
+      File : 3ENVR-260701.GBL
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D11
+    D12
+    D22
+    D32
+    D34
+*************************************************************
+
+*************************************************************
+Generating : Top Layer
+      File : 3ENVR-260701.GTL
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D11
+    D12
+    D13
+    D14
+    D15
+    D16
+    D17
+    D18
+    D19
+    D22
+    D30
+    D31
+    D32
+    D33
+    D34
+*************************************************************
+
