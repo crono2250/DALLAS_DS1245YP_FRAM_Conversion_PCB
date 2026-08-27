@@ -1,0 +1,96 @@
+format_version: 1
+instrument_family: Tektronix TDS7000
+instrument_focus: TDS7104
+publication_scope: reconstructed_information_only
+
+addressing:
+  tekscope_nvram_start_symbol: 0xFD0E0000
+  tekscope_nvram_size_symbol: 0x00020000
+  sys_nvram_physical_base: 0xFD0E0100
+  bsp_reserved_logical_size: 0x1000
+  physical_formula: "0xFD0E0100 + logical_offset"
+
+regions:
+  - name: vxworks_boot_line
+    logical_offset: 0x000
+    observed_operation_length: 0x0FF
+    nominal_slot_end_exclusive: 0x100
+    physical_start: 0xFD0E0100
+
+  - name: ethernet_mac
+    logical_offset: 0x100
+    length: 0x006
+    physical_start: 0xFD0E0200
+    notes:
+      - "Display/set routines use reversed byte ordering relative to conventional textual MAC display."
+      - "Original MAC was not confirmed in the recovered HDD data and must not be guessed."
+
+  - name: unclassified_reserved
+    logical_start: 0x106
+    logical_end_inclusive: 0x1FF
+    physical_start: 0xFD0E0206
+    physical_end_inclusive: 0xFD0E02FF
+
+  - name: tcs_configuration_shared_block
+    logical_start: 0x200
+    logical_end_inclusive: 0xFFF
+    length: 0xE00
+    physical_start: 0xFD0E0300
+    physical_end_inclusive: 0xFD0E10FF
+
+  - name: tcs_configuration_checksum
+    logical_offset: 0x200
+    length: 0x002
+    physical_start: 0xFD0E0300
+    protected_data_physical_start: 0xFD0E0302
+    protected_data_length: 0x0DFE
+
+  - name: serial_option_structure
+    logical_offset: 0x800
+    length: 0x058
+    physical_start: 0xFD0E0900
+    fields:
+      - { name: serial_length, offset: 0x00, type: uint32_be }
+      - { name: serial,        offset: 0x04, type: "char[16]" }
+      - { name: option_length, offset: 0x14, type: uint32_be }
+      - { name: option_key,    offset: 0x18, type: "char[64]" }
+
+  - name: dbms_powerup_status
+    physical_start: 0xFD0E1100
+    length: 0x004
+
+  - name: tekscope_database_ramdisk
+    physical_start: 0xFD0E1104
+    status: partially_understood
+
+vxworks_nvfs:
+  boot_parameter: "nvfs=0x1000"
+  parsed_size_bytes: 0x1000
+  initial_nvram_device_base: 0xFD0FF100
+
+factory_default_behavior:
+  database_only_flag: NvramClearDb
+  filesystem_reformat_flag: NvramClearNvram
+  database_files_removed:
+    - /nvram/TDS7000.CVN
+    - /nvram/TDS7000.CVO
+    - /nvram/TDS0.DBS
+    - /nvram/TDS1.DBS
+    - /nvram/TDS2.DBS
+    - /nvram/TDS3.DBS
+    - /nvram/TDS4.DBS
+    - /nvram/TDS5.DBS
+    - /nvram/TDS6.DBS
+    - /nvram/TDS7.DBS
+    - /nvram/TDS8.DBS
+    - /nvram/TDS9.DBS
+    - /nvram/TDS10.DBS
+
+private_material_intentionally_excluded:
+  - firmware
+  - executable_or_object_files
+  - setup_tcs
+  - serial_backup_file
+  - option_key_backup_file
+  - device_specific_option_key
+  - third_party_binaries
