@@ -6,9 +6,12 @@ publication_scope: reconstructed_information_only
 addressing:
   tekscope_nvram_start_symbol: 0xFD0E0000
   tekscope_nvram_size_symbol: 0x00020000
+  tekscope_symbol_range_end_exclusive: 0xFD100000
   sys_nvram_physical_base: 0xFD0E0100
+  sys_nvram_base_plus_size: 0xFD100100
   bsp_reserved_logical_size: 0x1000
   physical_formula: "0xFD0E0100 + logical_offset"
+  boundary_interpretation_status: hardware_evidence_required
 
 regions:
   - name: vxworks_boot_line
@@ -61,12 +64,42 @@ regions:
 
   - name: tekscope_database_ramdisk
     physical_start: 0xFD0E1104
+    observed_block_count: 254
+    observed_block_size: 0x200
+    derived_length: 0x1FC00
+    derived_end_exclusive: 0xFD100D04
+    derived_last_byte: 0xFD100D03
+    excess_beyond_tekscope_symbol_range: 0xD04
+    excess_beyond_sys_nvram_base_plus_size: 0xC04
     status: partially_understood
 
 vxworks_nvfs:
   boot_parameter: "nvfs=0x1000"
   parsed_size_bytes: 0x1000
   initial_nvram_device_base: 0xFD0FF100
+  initial_nvram_device_end_exclusive: 0xFD100100
+  boundary_interpretation_status: hardware_evidence_required
+
+open_verification_tasks:
+  - id: nvram_end_boundary
+    status: hardware_evidence_required
+    current_repository_evidence:
+      adapter_device: FM28V100-TG
+      adapter_device_organization: "128K x 8"
+      adapter_address_lines: "A0..A16"
+      confirmed_capacity_bytes: 0x20000
+      limitation: no_tds7000_mainboard_address_decode
+    safe_evidence:
+      - runtime_block_device_geometry
+      - board_level_address_decode_information
+      - nondestructive_address_range_comparison
+
+  - id: logical_0x106_0x1ff_classification
+    status: additional_analysis_required
+    preservation_rule: preserve_verbatim
+    safe_evidence:
+      - additional_bsp_or_bootrom_analysis
+      - comparison_of_legitimate_surviving_dumps
 
 factory_default_behavior:
   database_only_flag: NvramClearDb

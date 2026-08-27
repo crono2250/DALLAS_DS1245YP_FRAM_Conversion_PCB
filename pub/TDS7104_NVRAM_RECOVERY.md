@@ -117,6 +117,8 @@ The boot-line `other` parameter `nvfs=0x1000` is parsed as an NVRAM filesystem s
 0xFD100100 - 0x1000 = 0xFD0FF100
 ```
 
+The resulting 4096-byte initial device has an end-exclusive address of `0xFD100100`. For comparison, adding the TekScope NVRAM size symbol to its start symbol gives an end-exclusive address of `0xFD100000`. This arithmetic difference is recorded here without assuming which boundary reflects the board-level address decode.
+
 During later TekScope initialization, the initial device can be removed and replaced by the larger TekScope NVRAM RAM-disk beginning at `0xFD0E1104`.
 
 ## MAC address handling
@@ -144,6 +146,32 @@ For reconstruction using legitimately retained private service data:
 6. Disable the clear flag after the one intended factory-default boot.
 7. Do not touch acquisition calibration merely to repair PPC NVRAM state.
 
-## Unresolved point
+## Open verification tasks
 
-The observed TekScope RAM-disk construction uses a base of `0xFD0E1104` and parameters that, when interpreted as a simple `254 * 512` byte device, extend beyond the straightforward `0x20000`-byte range implied by the NVRAM size symbol. Current evidence is insufficient to determine whether this results from address mirroring, board-level decode behavior, or another implementation detail. Do not assume an answer without board-level confirmation.
+The following questions require additional evidence. They are not prerequisites for preserving the existing NVRAM or following the conservative recovery order above.
+
+### NVRAM end boundary and RAM-disk geometry
+
+The observed TekScope RAM-disk construction uses a base of `0xFD0E1104` with 254 blocks of 512 bytes. The derived values are:
+
+```text
+RAM-disk length                         254 * 512 = 0x1FC00 bytes
+RAM-disk end (exclusive)                0xFD100D04
+RAM-disk last byte                      0xFD100D03
+
+TekScope start symbol + size            0xFD100000 (exclusive)
+RAM-disk excess beyond that boundary    0x00000D04 bytes
+
+sysNvRam physical base + same size      0xFD100100 (exclusive)
+RAM-disk excess beyond that boundary    0x00000C04 bytes
+```
+
+The arithmetic is confirmed, but the hardware behavior is not. Current evidence is insufficient to determine whether the apparent excess results from address mirroring, board-level decode behavior, a different size convention, or another implementation detail.
+
+The [replacement-module schematic](../Schematic/3ENVM-260701_Sch%20and%20Assy.PDF) in this repository confirms a 128K x 8 FM28V100 device with address lines `A0..A16` and the byte-wide data/control interface exposed by the adapter. It supports a physical device capacity of `0x20000` bytes, but it contains no TDS7000 mainboard address-decode logic. Therefore the repository's adapter design alone cannot resolve the CPU address-window or mirroring behavior.
+
+Evidence that could resolve this safely includes the runtime block-device geometry, board-level address-decode information, or a non-destructive comparison of the relevant address ranges using an established service procedure. Do not use exploratory writes to determine the answer.
+
+### Logical `0x106..0x1FF` classification
+
+The 250 bytes between the Ethernet MAC and the shared TCS/configuration block remain unclassified by the current analysis. Treat this range as reserved and preserve it verbatim. Classification requires additional BSP/BootROM evidence or a comparison of legitimate surviving dumps; it must not be inferred by writing test patterns.

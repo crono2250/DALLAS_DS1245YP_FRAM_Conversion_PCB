@@ -27,7 +27,7 @@ Published:
 2. Do not invent a MAC address. The recovered HDD set did not contain a confirmed backup of the original PPC Ethernet MAC address.
 3. `NvramClearDb` and `NvramClearNvram` are different operations. The former removes TekScope database files for power-up/default regeneration; the latter reformats the NVRAM filesystem and is more destructive.
 4. Acquisition/calibration data is separate from the PPC NVRAM configuration described here.
-5. Some address-range behavior near the end of the mapped NVRAM remains unresolved; see `TDS7104_NVRAM_RECOVERY.md`.
+5. Some address-range behavior near the end of the mapped NVRAM remains unresolved; see the [open verification tasks](TDS7104_NVRAM_RECOVERY.md#open-verification-tasks).
 
 ## Files
 
